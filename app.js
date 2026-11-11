@@ -164,7 +164,7 @@ $('#methBox').innerHTML = `<h3>Methodology</h3>
 // ---------- init ----------
 $('#heat').innerHTML = heatTable();
 if(window.innerWidth < 700) $('#heatBox').open = false;
-V.renderCompare(); V.renderCompute(); renderTimeline(); renderBts();
+V.renderCompare(); if(window.BM) BM.render(); V.renderCompute(); renderTimeline(); renderBts();
 const pst = {mode:'solo', lab:'openai', range:'recent', bench:null};
 // URL hooks: ?v=dash|compare|timeline|bts|compute &exp=<lab>|all &cats=models,econ &labs=openai,xai &sort=gap &meth=1
 const q = new URLSearchParams(location.search);

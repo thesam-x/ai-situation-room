@@ -2,6 +2,18 @@
 // Add a new object at the top for a feature or editorial change.
 window.AISR_RELEASES = [
   {
+    version: "1.5",
+    date: "2026-11-10",
+    dateLabel: "Nov 10, 2026",
+    title: "Markets tab",
+    changes: [
+      "New Markets tab: 111 publicly traded AI-related companies (US and major foreign listings) with price, day change, market cap, 1-year change and a quote link, grouped by market-cap tier (>$1T down to <$1B) or by segment.",
+      "Segment and market-cap filters with All / None and solo (Alt/Option-click or double-click), plus sort and a ticker/name search. A separate table lists private AI unicorns with their latest reported valuation, date and source; they are not tradable.",
+      "Numbers come from delayed public market data refreshed by a script; anything that could not be fetched shows a dash. Not investment advice.",
+      "Compare tab: new apples-to-apples benchmark table. Every text model is a row and every benchmark a column, using one metric and harness per column (independent Epoch AI runs and public leaderboards), each model at its highest evaluated reasoning effort. Gaps show n/r, columns are sortable, and vendor self-reported Terminal-Bench numbers are marked and kept separate."
+    ]
+  },
+  {
     version: "1.4",
     date: "2026-11-10",
     dateLabel: "Nov 10, 2026",

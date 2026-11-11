@@ -17,6 +17,7 @@ AI moves so fast that I wanted one place to see the labs, models, benchmarks and
 - **Beneath the Surface**: what labs say compared with what the data shows
 - **Compute & chips**
 - **Agent-Driven Delivery**: a weekly brief
+- **Markets**: 111 publicly traded AI-related stocks by segment and market-cap tier, plus private AI unicorns with sourced valuations. The Compare tab also has an apples-to-apples benchmark table.
 
 ## Run it
 It's a plain static site with no build step and no external JavaScript. Open `index.html` in a browser, or run:
@@ -26,6 +27,11 @@ python3 -m http.server
 ```
 
 Styles are Tailwind CSS v4, compiled to `style.css`. The data lives in `data/`.
+
+## Markets data and refresh scripts
+Market data comes from free, keyless, delayed Yahoo Finance endpoints. `python3 tools/refresh-markets.py` rewrites `data/markets.js` (tickers and unicorns are edited in `tools/markets-universe.json`). `python3 tools/build-bench-matrix.py` rebuilds the benchmark table from Epoch AI's public data (`tools/bench-models.json` maps the models). `tools/daily-markets-deploy.sh` refreshes the market data and deploys it (needs a `VERCEL_TOKEN` env var). **Not investment advice.** Data is delayed and may be incomplete.
+
+![Markets](screenshots/live-v1.5-markets-light-1280x800.png)
 
 ## Contributing
 Feel free to use it, fork or clone it, and open an issue or pull request with ideas. Collaboration is welcome.
