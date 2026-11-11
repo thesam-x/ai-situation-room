@@ -61,7 +61,7 @@ function renderGrid(){
   if(s === 'release') labs.sort((a,b) => byDateDesc(latestRelease(a), latestRelease(b)));
   if(s === 'activity') labs.sort((a,b) => totalItems(b.id) - totalItems(a.id));
   if(s === 'gap') labs.sort((a,b) => U.maxGap(b.id) - U.maxGap(a.id));
-  $('#grid').innerHTML = labs.map(card).join('') || '<div class="note">No labs selected.</div>';
+  $('#grid').innerHTML = labs.map(card).join('') || '<div class="note">No labs selected. <button type="button" class="qbtn" data-qempty="labs">Show all labs</button></div>';
   $('#grid').querySelectorAll('[data-exp]').forEach(b => b.onclick = () => { const id = b.dataset.exp; state.open.has(id) ? state.open.delete(id) : state.open.add(id); renderGrid(); if(!state.open.has(id)) document.getElementById('card-' + id).scrollIntoView({block:'nearest'}); });
   $('#grid').querySelectorAll('[data-bts]').forEach(b => b.onclick = () => { setView('bts'); const el = document.getElementById('bts-' + b.dataset.bts); if(el) el.scrollIntoView({block:'start'}); });
   $('#expAll').textContent = state.open.size === U.LABS.length ? 'Collapse all' : 'Expand all';
@@ -114,13 +114,30 @@ renderX(XP.posts, XP.source_file); // embedded by build.py; re-run it after X Po
 // ---------- toolbar ----------
 $('#catChips').innerHTML = CATS.map(([k,n]) => `<button class="chip on" data-cat="${k}">${n}</button>`).join('');
 $('#labChips').innerHTML = U.LABS.map(l => `<button class="chip on" data-lab="${l.id}" style="--c:${HQ[l.id].color}"><span class="sw"></span>${esc(U.SHORT[l.id])}</button>`).join('');
-const syncChips = () => { document.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('on', state.cats.has(b.dataset.cat))); document.querySelectorAll('[data-lab]').forEach(b => b.classList.toggle('on', state.labs.has(b.dataset.lab))); };
-document.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { const k = b.dataset.cat; state.cats.has(k) ? state.cats.delete(k) : state.cats.add(k); if(q.has('pm')) pst.mode = q.get('pm'); if(q.has('plab')) pst.lab = q.get('plab'); if(q.has('range')) pst.range = q.get('range'); if(q.has('bench')) pst.bench = q.get('bench');
-window.P.render(pst);
-syncChips(); renderGrid(); });
-document.querySelectorAll('[data-lab]').forEach(b => b.onclick = () => { const k = b.dataset.lab; state.labs.has(k) ? state.labs.delete(k) : state.labs.add(k); if(q.has('pm')) pst.mode = q.get('pm'); if(q.has('plab')) pst.lab = q.get('plab'); if(q.has('range')) pst.range = q.get('range'); if(q.has('bench')) pst.bench = q.get('bench');
-window.P.render(pst);
-syncChips(); renderGrid(); });
+const SOLO_TIP = 'Click to toggle · Alt/Option-click or double-click to show only this one';
+const GROUPS = {cats: {attr: 'cat', all: () => CATS.map(c => c[0])}, labs: {attr: 'lab', all: () => U.LABS.map(l => l.id)}};
+const syncChips = () => {
+  Object.entries(GROUPS).forEach(([g, G]) => {
+    document.querySelectorAll(`[data-${G.attr}]`).forEach(b => { const on = state[g].has(b.dataset[G.attr]); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+    const n = state[g].size, total = G.all().length;
+    document.querySelectorAll(`[data-qall="${g}"]`).forEach(b => b.setAttribute('aria-disabled', n === total));
+    document.querySelectorAll(`[data-qnone="${g}"]`).forEach(b => b.setAttribute('aria-disabled', n === 0));
+  });
+};
+const applyChips = () => { if(q.has('pm')) pst.mode = q.get('pm'); if(q.has('plab')) pst.lab = q.get('plab'); if(q.has('range')) pst.range = q.get('range'); if(q.has('bench')) pst.bench = q.get('bench');
+  window.P.render(pst); syncChips(); renderGrid(); };
+Object.entries(GROUPS).forEach(([g, G]) => {
+  document.querySelectorAll(`[data-${G.attr}]`).forEach(b => {
+    const k = b.dataset[G.attr]; b.title = SOLO_TIP;
+    const solo = () => { state[g] = new Set([k]); applyChips(); };
+    b.onclick = e => { if(e.altKey){ e.preventDefault(); return solo(); } state[g].has(k) ? state[g].delete(k) : state[g].add(k); applyChips(); };
+    b.ondblclick = e => { e.preventDefault(); solo(); };
+    b.onkeydown = e => { if(e.altKey && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); solo(); } };
+  });
+  document.querySelectorAll(`[data-qall="${g}"]`).forEach(b => b.onclick = () => { state[g] = new Set(G.all()); applyChips(); });
+  document.querySelectorAll(`[data-qnone="${g}"]`).forEach(b => b.onclick = () => { state[g] = new Set(); applyChips(); });
+});
+$('#grid').addEventListener('click', e => { if(e.target.closest('[data-qempty]')){ state.labs = new Set(GROUPS.labs.all()); applyChips(); } });
 $('#sortSel').onchange = e => { state.sort = e.target.value; renderGrid(); };
 $('#expAll').onclick = () => { if(state.open.size === U.LABS.length) state.open.clear(); else U.LABS.forEach(l => state.open.add(l.id)); renderGrid(); };
 function setView(v){

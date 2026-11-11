@@ -2,6 +2,17 @@
 // Add a new object at the top for a feature or editorial change.
 window.AISR_RELEASES = [
   {
+    version: "1.4",
+    date: "2026-11-10",
+    dateLabel: "Nov 10, 2026",
+    title: "Quick All / None for filters",
+    changes: [
+      "Added All and None buttons next to the Show (sections) and Labs filter chips on the Dashboard, so you can select or clear a whole group in one click.",
+      "Alt/Option-click or double-click a chip to show only that one (hover a chip for the hint). Keyboard: Tab to a chip, then Alt+Enter. Chips now announce their on/off state to screen readers.",
+      "Added a one-line support note in the page footer."
+    ]
+  },
+  {
     version: "1.3",
     date: "2026-11-10",
     dateLabel: "Nov 10, 2026",

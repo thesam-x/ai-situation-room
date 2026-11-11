@@ -29,3 +29,6 @@ Styles are Tailwind CSS v4, compiled to `style.css`. The data lives in `data/`.
 
 ## Contributing
 Feel free to use it, fork or clone it, and open an issue or pull request with ideas. Collaboration is welcome.
+
+## Support
+Support this project: donations accepted via X Money to [@thesam](https://x.com/thesam).

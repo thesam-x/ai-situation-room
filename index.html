@@ -37,8 +37,8 @@
 <main>
   <section class="view open" id="v-dash">
     <div class="toolbar">
-      <div class="tgroup"><span class="tl">Show</span><div class="chips" id="catChips"></div></div>
-      <div class="tgroup"><span class="tl">Labs</span><div class="chips" id="labChips"></div></div>
+      <div class="tgroup"><span class="tl" id="catLbl">Show</span><span class="qsel" role="group" aria-label="Quick select sections"><button type="button" class="qbtn" data-qall="cats" title="Show all sections">All</button><button type="button" class="qbtn" data-qnone="cats" title="Hide all sections">None</button></span><div class="chips" id="catChips" role="group" aria-labelledby="catLbl"></div></div>
+      <div class="tgroup"><span class="tl" id="labLbl">Labs</span><span class="qsel" role="group" aria-label="Quick select labs"><button type="button" class="qbtn" data-qall="labs" title="Select all labs">All</button><button type="button" class="qbtn" data-qnone="labs" title="Clear all labs">None</button></span><div class="chips" id="labChips" role="group" aria-labelledby="labLbl"></div></div>
       <div class="tgroup"><label class="tl" for="sortSel">Sort</label>
         <select id="sortSel">
           <option value="default">Default order</option>
@@ -64,6 +64,7 @@
   <section class="view" id="v-compute"></section>
   <section class="view" id="v-delivery"></section>
 </main>
+<footer class="sitefoot">Support this project: donations accepted via X Money to <a href="https://x.com/thesam" target="_blank" rel="noopener">@thesam</a></footer>
 
 <div id="modal"><div class="box" id="methBox"></div></div>
 
