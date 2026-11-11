@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # Daily Markets refresh + production deploy for the AI Situation Room (static site on Vercel).
 #
-#   1. python3 tools/refresh-markets.py        -> rewrites data/markets.js (Yahoo Finance, keyless, delayed)
-#   2. python3 tools/build-manifest.py         -> SHA1/size/base64 manifest of the deployable files (no tools/, shots/)
+#   1. python3 tools/refresh-markets.py        -> rewrites data/markets.js (daily snapshot incl. 7D/1M/3M/6M/1Y changes)
+#                                                 api/_markets.json (gated copy for /api/markets) and api/_tickers.json (for /api/quotes)
+#   2. python3 tools/build-manifest.py         -> SHA1/size/base64 manifest of the deployable files incl. api/ (no tools/, shots/)
 #   3. Vercel REST API (same calls the deploy uses now): upload each file (POST /v2/files),
 #      then create a deployment with target=production (POST /v13/deployments) and wait for READY
-#   4. curl the live /data/markets.js and check its "asOf" equals the freshly generated one
+#   4. curl the public /api/markets-status and check its "asOf" equals the freshly generated one
 #
 # Usage:
 #   VERCEL_TOKEN=... tools/daily-markets-deploy.sh            # refresh + deploy to production + verify
 #   tools/daily-markets-deploy.sh --no-deploy                 # refresh + manifest only (no token needed)
-#   tools/daily-markets-deploy.sh --verify-only               # just compare live asOf with local data/markets.js
+#   tools/daily-markets-deploy.sh --verify-only               # just compare live asOf (/api/markets-status) with local data/markets.js
 # Env:
 #   VERCEL_TOKEN      required for deploy (create at vercel.com/account/tokens; never commit it)
 #   VERCEL_TEAM_ID    optional team scope (team_...)
@@ -32,12 +33,14 @@ log(){ echo "[$(date '+%Y-%m-%d %H:%M:%S %Z')] $*"; }
 asof(){ python3 -c 'import re,sys; m=re.search(r"\"asOf\":\s*\"([^\"]+)\"", sys.stdin.read()); print(m.group(1) if m else "")'; }
 
 verify(){
+  # data/markets.js is no longer deployed (Markets is gated behind Sign in with X); the public /api/markets-status
+  # endpoint exposes only the snapshot's asOf, which is enough to confirm the new data is live.
   local want got code
   want=$(asof < data/markets.js)
   for i in 1 2 3 4 5 6; do
-    code=$(curl -s -o /tmp/asr-live-markets.js -w '%{http_code}' -H 'Cache-Control: no-cache' "$SITE/data/markets.js?ts=$(date +%s)")
-    got=$(asof < /tmp/asr-live-markets.js || true)
-    [ "$code" = 200 ] && [ "$got" = "$want" ] && { log "VERIFIED live $SITE/data/markets.js 200, asOf=$got"; return 0; }
+    code=$(curl -s -o /tmp/asr-live-status.json -w '%{http_code}' -H 'Cache-Control: no-cache' "$SITE/api/markets-status?ts=$(date +%s)")
+    got=$(python3 -c 'import json; print(json.load(open("/tmp/asr-live-status.json")).get("asOf",""))' 2>/dev/null || true)
+    [ "$code" = 200 ] && [ "$got" = "$want" ] && { log "VERIFIED live $SITE/api/markets-status 200, asOf=$got"; return 0; }
     sleep 10
   done
   log "VERIFY FAILED: http=$code live asOf='$got' expected '$want'"; return 3

@@ -2,7 +2,7 @@
 """Refresh data/markets.js for the AI Situation Room Markets tab.
 
 Source: Yahoo Finance public, keyless JSON endpoints (no API key, no login):
-  - /v8/finance/chart/<SYM>?range=1y&interval=1d   -> price, day change %, 1-year closes
+  - /v8/finance/chart/<SYM>?range=2y&interval=1d   -> price, day change %, daily closes for 7D/1M/3M/6M/1Y changes
   - /ws/fundamentals-timeseries/.../timeseries/<SYM>?type=trailingMarketCap -> latest reported market cap (+ its date)
   - /v8/finance/chart/<CCY>=X                       -> FX to convert non-USD market caps to USD for tiering
 Nothing is estimated: any value that cannot be fetched is written as null and shown as a dash.
@@ -29,17 +29,39 @@ def get(url, tries=3):
             err = e; time.sleep(1.5 * (i + 1))
     print(f"  ! {url[:90]} -> {err}", file=sys.stderr); return None
 
+PERIODS = [("7d", 7), ("1m", 30), ("3m", 90), ("6m", 180), ("1y", 365)]   # label key, calendar-day lookback
+TOL_DAYS = 7   # the nearest close must be within this many days of the lookback date, else null (dash)
+
+def changes(price, ts, closes, ref_ts, gmtoff=0):
+    """% change from the daily close nearest to (ref - N days) to the current price; None if history is too short."""
+    out, base = {}, {}
+    pts = [(t, c) for t, c in zip(ts, closes) if c is not None and t is not None]
+    for key, days in PERIODS:
+        target = ref_ts - days * 86400
+        if not price or not pts or pts[0][0] > target + TOL_DAYS * 86400:   # history starts after the lookback date
+            out[key] = None; base[key] = None; continue
+        t, c = min(pts, key=lambda p: abs(p[0] - target))
+        if abs(t - target) > TOL_DAYS * 86400:
+            out[key] = None; base[key] = None; continue
+        out[key] = (price / c - 1) * 100
+        base[key] = datetime.datetime.fromtimestamp(t + gmtoff, datetime.timezone.utc).strftime("%Y-%m-%d")   # exchange-local trading date
+    return out, base
+
 def chart(sym):
-    j = get(f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(sym)}?range=1y&interval=1d")
+    # 2y of daily closes so the 1Y lookback date is always inside the window when the history exists
+    j = get(f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(sym)}?range=2y&interval=1d")
     try: res = j["chart"]["result"][0]
     except Exception: return None
-    m = res["meta"]; closes = [c for c in (res.get("indicators", {}).get("quote", [{}])[0].get("close") or []) if c is not None]
+    m = res["meta"]; raw = res.get("indicators", {}).get("quote", [{}])[0].get("close") or []
+    ts = res.get("timestamp") or []
+    closes = [c for c in raw if c is not None]
     price = m.get("regularMarketPrice")
     day = m.get("regularMarketChangePercent")
     if day is None and price and len(closes) >= 2: day = (price / closes[-2] - 1) * 100
-    y1 = (price / closes[0] - 1) * 100 if price and closes and len(closes) > 200 else None
+    ref = m.get("regularMarketTime") or (ts[-1] if ts else int(time.time()))
+    chg, base = changes(price, ts, raw, ref, m.get("gmtoffset") or 0)
     return {"name": m.get("longName") or m.get("shortName"), "price": price, "currency": m.get("currency"),
-            "day_pct": day, "y1_pct": y1, "exchange": m.get("fullExchangeName"), "time": m.get("regularMarketTime")}
+            "day_pct": day, "chg": chg, "base": base, "exchange": m.get("fullExchangeName"), "time": m.get("regularMarketTime")}
 
 def mcap(sym):
     p2 = int(time.time()); p1 = p2 - 45 * 86400
@@ -67,11 +89,11 @@ for sym, seg in UNIV["tickers"]:
     c = chart(sym); m = mcap(sym); time.sleep(0.25)
     cap_usd = to_usd(m["value"], m["currency"]) if m else None
     row = {"t": sym, "seg": seg, "name": (c or {}).get("name"), "price": (c or {}).get("price"), "ccy": (c or {}).get("currency"),
-           "day": (c or {}).get("day_pct"), "y1": (c or {}).get("y1_pct"), "cap": cap_usd, "capLocal": m["value"] if m else None,
+           "day": (c or {}).get("day_pct"), **{k: ((c or {}).get("chg") or {}).get(k) for k, _ in PERIODS}, "y1": ((c or {}).get("chg") or {}).get("1y"), "base": (c or {}).get("base"), "cap": cap_usd, "capLocal": m["value"] if m else None,
            "capCcy": m["currency"] if m else None, "capDate": m["date"] if m else None, "tier": tier(cap_usd),
            "ex": (c or {}).get("exchange"), "mt": (c or {}).get("time"), "note": UNIV.get("notes", {}).get(sym),
            "url": f"https://finance.yahoo.com/quote/{urllib.parse.quote(sym)}/"}
-    gaps = [k for k in ("price", "day", "y1", "cap") if row[k] is None]
+    gaps = [k for k in ("price", "day", *[k for k, _ in PERIODS], "cap") if row[k] is None]
     if gaps: missing.append({"t": sym, "missing": gaps})
     rows.append(row); print(f"{sym:10} {seg:9} price={row['price']} day={row['day'] and round(row['day'],2)} y1={row['y1'] and round(row['y1'],1)} cap={row['cap'] and round(row['cap']/1e9,1)}B {row['tier']}")
 
@@ -81,8 +103,14 @@ mkt = datetime.datetime.fromtimestamp(max(us_times), ET) if us_times else None
 out = {"asOf": now.isoformat(timespec="minutes"), "asOfLabel": now.strftime("%b %-d, %Y, %-I:%M %p ET"),
        "pricesAsOfLabel": mkt.strftime("%b %-d, %Y, %-I:%M %p ET") if mkt else None,
        "source": "Yahoo Finance (public chart and fundamentals-timeseries endpoints, delayed)",
+       "periods": [{"key": k, "label": k.upper(), "days": d} for k, d in PERIODS], "periodRule": f"Change from the daily close nearest to each lookback date (within {TOL_DAYS} days) to the latest price; dash if the history is shorter.",
        "segments": UNIV["segments"], "tiers": [lbl for _, lbl in TIERS], "fx": FX, "rows": rows, "missing": missing,
        "unicorns": UNIV["unicorns"], "unicornNotes": UNIV.get("unicorn_notes", [])}
+# ticker list for the live-quotes function (api/quotes.js); currency lets it convert to USD
+(ROOT / "api").mkdir(exist_ok=True)
+(ROOT / "api" / "_markets.json").write_text(json.dumps(out, ensure_ascii=False) + "\n")   # gated copy served by /api/markets
+(ROOT / "api" / "_tickers.json").write_text(json.dumps([[r["t"], r.get("ccy") or "USD"] for r in rows]) + "\n")
 (ROOT / "data" / "markets.js").write_text("// Generated by tools/refresh-markets.py. Do not edit by hand.\nwindow.MARKETS = " + json.dumps(out, ensure_ascii=False, indent=0) + ";\n")
+for k, _ in PERIODS: print(f"missing {k.upper()}: {sum(1 for r in rows if r[k] is None)}")
 print(f"\nwrote data/markets.js: {len(rows)} tickers, {len(missing)} with gaps, as of {out['asOfLabel']}")
 for m in missing: print("  gap:", m)

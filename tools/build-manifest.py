@@ -14,7 +14,9 @@ from pathlib import Path
 
 EXCLUDE_DIRS = {"shots", "tools"}
 EXCLUDE_SUFFIXES = {".zip"}
-EXCLUDE_NAMES = {"build.py"}
+EXCLUDE_NAMES = {"build.py", "README.txt"}   # README.txt = internal maintainer notes
+# The Markets snapshot is served to signed-in users by /api/markets (api/_markets.json), so the static copy is not deployed.
+EXCLUDE_PATHS = {"data/markets.js"}
 
 def main():
     ap = argparse.ArgumentParser()
@@ -36,7 +38,7 @@ def main():
             continue
         if p.suffix.lower() in EXCLUDE_SUFFIXES:
             continue
-        if p.name in EXCLUDE_NAMES:
+        if p.name in EXCLUDE_NAMES or rel.as_posix() in EXCLUDE_PATHS:
             continue
         data = p.read_bytes()
         sha1 = hashlib.sha1(data).hexdigest()
