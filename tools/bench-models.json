@@ -1,0 +1,201 @@
+{
+ "_note": "Rows for the apples-to-apples benchmark table: every text model in the ASR dataset. 'epoch' = Epoch AI model-version base (before the _effort suffix); 'eci' = Epoch Capabilities Index display name; 'tb' = model name used in the ASR dataset's Terminal-Bench 4.0 entries. Missing keys mean no match -> n/r.",
+ "rows": [
+  {
+   "lab": "openai",
+   "model": "GPT-6 Astra",
+   "epoch": "gpt-6-astra",
+   "eci": "GPT-6 Astra",
+   "tb": "GPT-6 Astra"
+  },
+  {
+   "lab": "openai",
+   "model": "GPT-6.1 Sol",
+   "epoch": "gpt-6.1-sol",
+   "eci": "GPT-6.1 Sol"
+  },
+  {
+   "lab": "openai",
+   "model": "GPT-6 Sol",
+   "epoch": "gpt-6-sol",
+   "eci": "GPT-6 Sol"
+  },
+  {
+   "lab": "openai",
+   "model": "GPT-6 Luna",
+   "epoch": "gpt-6-luna",
+   "eci": "GPT-6 Luna"
+  },
+  {
+   "lab": "openai",
+   "model": "GPT-5.4 Pro",
+   "epoch": "gpt-5.4-pro-2026-03-05",
+   "eci": "GPT-5.4 Pro"
+  },
+  {
+   "lab": "openai",
+   "model": "GPT-5.4",
+   "epoch": "gpt-5.4-2026-03-05",
+   "eci": "GPT-5.4"
+  },
+  {
+   "lab": "openai",
+   "model": "GPT-5",
+   "epoch": "gpt-5-2025-08-07",
+   "eci": "GPT-5"
+  },
+  {
+   "lab": "anthropic",
+   "model": "Claude Fable 5.2",
+   "epoch": "claude-fable-5-2",
+   "eci": "Claude Fable 5.2"
+  },
+  {
+   "lab": "anthropic",
+   "model": "Claude Mythos 5.2"
+  },
+  {
+   "lab": "anthropic",
+   "model": "Claude Opus 5.5",
+   "epoch": "claude-opus-5-5",
+   "eci": "Claude Opus 5.5",
+   "tb": "Claude Opus 5.5"
+  },
+  {
+   "lab": "anthropic",
+   "model": "Claude Opus 5",
+   "epoch": "claude-opus-5",
+   "eci": "Claude Opus 5"
+  },
+  {
+   "lab": "anthropic",
+   "model": "Claude Opus 4.8",
+   "epoch": "claude-opus-4-8",
+   "eci": "Claude Opus 4.8"
+  },
+  {
+   "lab": "anthropic",
+   "model": "Claude Sonnet 5.5",
+   "epoch": "claude-sonnet-5-5",
+   "eci": "Claude Sonnet 5.5"
+  },
+  {
+   "lab": "anthropic",
+   "model": "Claude Haiku 5.5",
+   "epoch": "claude-haiku-5-5",
+   "eci": "Claude Haiku 5.5"
+  },
+  {
+   "lab": "google_deepmind",
+   "model": "Gemini 4 Carbon",
+   "epoch": "gemini-4-carbon",
+   "eci": "Gemini 4 Carbon"
+  },
+  {
+   "lab": "google_deepmind",
+   "model": "Gemini 4 Argon",
+   "epoch": "gemini-4-argon",
+   "eci": "Gemini 4 Argon"
+  },
+  {
+   "lab": "google_deepmind",
+   "model": "Gemini 3.8 Flash",
+   "epoch": "gemini-3.8-flash",
+   "eci": "Gemini 3.8 Flash"
+  },
+  {
+   "lab": "google_deepmind",
+   "model": "Gemini 3.7 Flash",
+   "epoch": "gemini-3.7-flash",
+   "eci": "Gemini 3.7 Flash"
+  },
+  {
+   "lab": "xai",
+   "model": "Grok 4.7",
+   "epoch": "grok-4.7",
+   "eci": "Grok 4.7",
+   "tb": "Grok 4.7 xHigh"
+  },
+  {
+   "lab": "xai",
+   "model": "Grok 4.6",
+   "epoch": "grok-4.6",
+   "eci": "Grok 4.6"
+  },
+  {
+   "lab": "xai",
+   "model": "Grok 4.5",
+   "epoch": "grok-4.5",
+   "eci": "Grok 4.5"
+  },
+  {
+   "lab": "xai",
+   "model": "Grok 5 (in training)"
+  },
+  {
+   "lab": "meta",
+   "model": "Muse Wonder",
+   "epoch": "muse-wonder-1.0",
+   "eci": "Muse Wonder"
+  },
+  {
+   "lab": "meta",
+   "model": "Muse Spark 1.3",
+   "epoch": "muse-spark-1.3",
+   "eci": "Muse Spark 1.3"
+  },
+  {
+   "lab": "meta",
+   "model": "Muse Glimmer (open weights)"
+  },
+  {
+   "lab": "meta",
+   "model": "Llama 4 Maverick",
+   "epoch": "Llama-4-Maverick-17B-128E-Instruct",
+   "epoch_alt": "Llama-4-Maverick-17B-128E-Instruct-FP8"
+  },
+  {
+   "lab": "meta",
+   "model": "Llama 4 Scout",
+   "epoch": "Llama-4-Scout-17B-16E-Instruct"
+  },
+  {
+   "lab": "mistral",
+   "model": "Mistral Large 4 (API)",
+   "epoch": "mistral-large-4-0"
+  },
+  {
+   "lab": "mistral",
+   "model": "Mistral Large 4 (open weights)",
+   "epoch": "mistral-large-4-0-oss",
+   "tb": "Mistral Large 4 (open weights)"
+  },
+  {
+   "lab": "deepseek",
+   "model": "DeepSeek-V4.1-Flash (1017)",
+   "epoch": "deepseek-v4.1-flash-1017",
+   "eci": "DeepSeek V4.1 Flash 1017"
+  },
+  {
+   "lab": "deepseek",
+   "model": "DeepSeek-V4-Pro (0813)",
+   "epoch": "deepseek-v4-pro-0813",
+   "eci": "DeepSeek V4 Pro 0813"
+  },
+  {
+   "lab": "deepseek",
+   "model": "DeepSeek-V4.1-Pro (announced)"
+  },
+  {
+   "lab": "alibaba_qwen",
+   "model": "Qwen3.8-Max",
+   "epoch": "qwen3.8-max",
+   "eci": "Qwen 3.8 Max"
+  },
+  {
+   "lab": "alibaba_qwen",
+   "model": "Qwen4 (preview)"
+  }
+ ],
+ "excluded": "Not text-model rows: Grok Voice/Transcribe/Imagine bundle, Grok Build/Composer (coding products), Gemini 3.6 Flash / 3.5 Flash-Lite / 3.5 Flash Cyber (no separate entry in the ASR dataset)."
+}

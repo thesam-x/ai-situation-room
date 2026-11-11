@@ -1,0 +1,582 @@
+{
+ "_note": "Universe for the Markets tab. Edit tickers/segments here; prices and market caps are fetched by tools/refresh-markets.py. Unicorn valuations are curated by hand with a source link (never fetched or estimated).",
+ "segments": {
+  "chips": "Chips & semis",
+  "infra": "AI infrastructure, cloud, data centers, power & networking",
+  "software": "AI software & platforms",
+  "consumer": "Consumer & internet",
+  "robotics": "Robotics & autonomy",
+  "other": "Other"
+ },
+ "tickers": [
+  [
+   "NVDA",
+   "chips"
+  ],
+  [
+   "AMD",
+   "chips"
+  ],
+  [
+   "AVGO",
+   "chips"
+  ],
+  [
+   "TSM",
+   "chips"
+  ],
+  [
+   "ASML",
+   "chips"
+  ],
+  [
+   "MU",
+   "chips"
+  ],
+  [
+   "ARM",
+   "chips"
+  ],
+  [
+   "MRVL",
+   "chips"
+  ],
+  [
+   "INTC",
+   "chips"
+  ],
+  [
+   "QCOM",
+   "chips"
+  ],
+  [
+   "TXN",
+   "chips"
+  ],
+  [
+   "ADI",
+   "chips"
+  ],
+  [
+   "AMAT",
+   "chips"
+  ],
+  [
+   "LRCX",
+   "chips"
+  ],
+  [
+   "KLAC",
+   "chips"
+  ],
+  [
+   "SNPS",
+   "chips"
+  ],
+  [
+   "CDNS",
+   "chips"
+  ],
+  [
+   "NXPI",
+   "chips"
+  ],
+  [
+   "MCHP",
+   "chips"
+  ],
+  [
+   "ON",
+   "chips"
+  ],
+  [
+   "MPWR",
+   "chips"
+  ],
+  [
+   "ALAB",
+   "chips"
+  ],
+  [
+   "CRDO",
+   "chips"
+  ],
+  [
+   "CBRS",
+   "chips"
+  ],
+  [
+   "GFS",
+   "chips"
+  ],
+  [
+   "TER",
+   "chips"
+  ],
+  [
+   "LSCC",
+   "chips"
+  ],
+  [
+   "AMBA",
+   "chips"
+  ],
+  [
+   "POET",
+   "chips"
+  ],
+  [
+   "005930.KS",
+   "chips"
+  ],
+  [
+   "000660.KS",
+   "chips"
+  ],
+  [
+   "8035.T",
+   "chips"
+  ],
+  [
+   "6857.T",
+   "chips"
+  ],
+  [
+   "MSFT",
+   "infra"
+  ],
+  [
+   "AMZN",
+   "infra"
+  ],
+  [
+   "GOOGL",
+   "infra"
+  ],
+  [
+   "ORCL",
+   "infra"
+  ],
+  [
+   "BABA",
+   "infra"
+  ],
+  [
+   "CRWV",
+   "infra"
+  ],
+  [
+   "NBIS",
+   "infra"
+  ],
+  [
+   "ANET",
+   "infra"
+  ],
+  [
+   "CSCO",
+   "infra"
+  ],
+  [
+   "VRT",
+   "infra"
+  ],
+  [
+   "SMCI",
+   "infra"
+  ],
+  [
+   "DELL",
+   "infra"
+  ],
+  [
+   "HPE",
+   "infra"
+  ],
+  [
+   "EQIX",
+   "infra"
+  ],
+  [
+   "DLR",
+   "infra"
+  ],
+  [
+   "CEG",
+   "infra"
+  ],
+  [
+   "VST",
+   "infra"
+  ],
+  [
+   "TLN",
+   "infra"
+  ],
+  [
+   "GEV",
+   "infra"
+  ],
+  [
+   "ETN",
+   "infra"
+  ],
+  [
+   "CIEN",
+   "infra"
+  ],
+  [
+   "COHR",
+   "infra"
+  ],
+  [
+   "LITE",
+   "infra"
+  ],
+  [
+   "IREN",
+   "infra"
+  ],
+  [
+   "APLD",
+   "infra"
+  ],
+  [
+   "CORZ",
+   "infra"
+  ],
+  [
+   "WULF",
+   "infra"
+  ],
+  [
+   "CIFR",
+   "infra"
+  ],
+  [
+   "OKLO",
+   "infra"
+  ],
+  [
+   "SMR",
+   "infra"
+  ],
+  [
+   "NOW",
+   "software"
+  ],
+  [
+   "CRM",
+   "software"
+  ],
+  [
+   "PLTR",
+   "software"
+  ],
+  [
+   "SNOW",
+   "software"
+  ],
+  [
+   "ADBE",
+   "software"
+  ],
+  [
+   "DDOG",
+   "software"
+  ],
+  [
+   "MDB",
+   "software"
+  ],
+  [
+   "PATH",
+   "software"
+  ],
+  [
+   "AI",
+   "software"
+  ],
+  [
+   "SOUN",
+   "software"
+  ],
+  [
+   "INTU",
+   "software"
+  ],
+  [
+   "WDAY",
+   "software"
+  ],
+  [
+   "SAP",
+   "software"
+  ],
+  [
+   "IBM",
+   "software"
+  ],
+  [
+   "CRWD",
+   "software"
+  ],
+  [
+   "PANW",
+   "software"
+  ],
+  [
+   "ZS",
+   "software"
+  ],
+  [
+   "NET",
+   "software"
+  ],
+  [
+   "ESTC",
+   "software"
+  ],
+  [
+   "GTLB",
+   "software"
+  ],
+  [
+   "TEAM",
+   "software"
+  ],
+  [
+   "HUBS",
+   "software"
+  ],
+  [
+   "BBAI",
+   "software"
+  ],
+  [
+   "META",
+   "consumer"
+  ],
+  [
+   "AAPL",
+   "consumer"
+  ],
+  [
+   "TSLA",
+   "consumer"
+  ],
+  [
+   "BIDU",
+   "consumer"
+  ],
+  [
+   "0700.HK",
+   "consumer"
+  ],
+  [
+   "APP",
+   "consumer"
+  ],
+  [
+   "RDDT",
+   "consumer"
+  ],
+  [
+   "DUOL",
+   "consumer"
+  ],
+  [
+   "SHOP",
+   "consumer"
+  ],
+  [
+   "ISRG",
+   "robotics"
+  ],
+  [
+   "SYM",
+   "robotics"
+  ],
+  [
+   "ROK",
+   "robotics"
+  ],
+  [
+   "6954.T",
+   "robotics"
+  ],
+  [
+   "ABBN.SW",
+   "infra"
+  ],
+  [
+   "MBLY",
+   "robotics"
+  ],
+  [
+   "PONY",
+   "robotics"
+  ],
+  [
+   "WRD",
+   "robotics"
+  ],
+  [
+   "HSAI",
+   "robotics"
+  ],
+  [
+   "AUR",
+   "robotics"
+  ],
+  [
+   "SERV",
+   "robotics"
+  ],
+  [
+   "RR",
+   "robotics"
+  ],
+  [
+   "9984.T",
+   "other"
+  ],
+  [
+   "SPCX",
+   "other"
+  ],
+  [
+   "TEM",
+   "other"
+  ],
+  [
+   "RXRX",
+   "other"
+  ]
+ ],
+ "notes": {
+  "SPCX": "SpaceX; owns xAI (Grok) and Cursor maker Anysphere.",
+  "9984.T": "SoftBank Group; large OpenAI and Arm stakes.",
+  "BABA": "Alibaba Cloud and Qwen models; also e-commerce.",
+  "TSLA": "Primary listing here as consumer; also robotaxi and Optimus robotics.",
+  "GOOGL": "Google Cloud, TPUs and Gemini; also search and YouTube.",
+  "MSFT": "Azure and OpenAI partnership; also Office and Windows.",
+  "ABBN.SW": "Electrification and automation used in data centers; ABB agreed in 2025 to sell its robotics division to SoftBank."
+ },
+ "unicorns": [
+  {
+   "name": "OpenAI",
+   "what": "ChatGPT, GPT models",
+   "valuation_usd": 1250000000000.0,
+   "valuation_text": "$1.25 trillion (reported round portion)",
+   "date": "2026-11-06",
+   "source": "TechCrunch",
+   "url": "https://techcrunch.com/2026/11/06/openai-reportedly-raises-an-additional-11-billion-at-a-1-25-trillion-valuation/",
+   "status": "Private · reported"
+  },
+  {
+   "name": "Anthropic",
+   "what": "Claude models",
+   "valuation_usd": 1404000000000.0,
+   "valuation_text": "Up to $1.404 trillion fully diluted, implied by the IPO price range ($70–78/share)",
+   "date": "2026-11-10",
+   "source": "TechCrunch",
+   "url": "https://techcrunch.com/2026/11/10/anthropic-sets-ipo-price-range-of-70-to-78-per-share-to-reach-an-implied-valuation-of-1-404-trillion/",
+   "status": "Private · IPO price range set, not yet trading"
+  },
+  {
+   "name": "Databricks",
+   "what": "Data and AI platform",
+   "valuation_usd": 190000000000.0,
+   "valuation_text": "$190 billion ($5B round)",
+   "date": "2026-08-13",
+   "source": "Databricks",
+   "url": "https://www.databricks.com/company/newsroom/press-releases/databricks-grows-80-yoy-surpasses-7b-revenue-run-rate-scales",
+   "status": "Private"
+  },
+  {
+   "name": "DeepSeek",
+   "what": "DeepSeek models",
+   "valuation_usd": 74000000000.0,
+   "valuation_text": "About $74–75 billion pre-money (reported)",
+   "date": "2026-10-22",
+   "source": "TechCrunch",
+   "url": "https://techcrunch.com/2026/10/22/deepseek-reportedly-raises-15b-days-after-us-restrictions/",
+   "status": "Private · reported"
+  },
+  {
+   "name": "Thinking Machines Lab",
+   "what": "Frontier AI lab",
+   "valuation_usd": 45000000000.0,
+   "valuation_text": "$45 billion post-money ($5B at $40B pre), reported as closing",
+   "date": "2026-11",
+   "source": "Business Insider",
+   "url": "https://www.businessinsider.com/thinking-machines-lab-is-closing-5-billion-new-round-2026-11",
+   "status": "Private · reported, round not confirmed closed"
+  },
+  {
+   "name": "Figure AI",
+   "what": "Humanoid robots",
+   "valuation_usd": 39000000000.0,
+   "valuation_text": "$39 billion post-money (Series C)",
+   "date": "2025-09-16",
+   "source": "Figure",
+   "url": "https://www.figure.ai/news/series-c",
+   "status": "Private"
+  },
+  {
+   "name": "Safe Superintelligence (SSI)",
+   "what": "Frontier AI lab",
+   "valuation_usd": 32000000000.0,
+   "valuation_text": "$32 billion (last priced round)",
+   "date": "2025-04-12",
+   "source": "StockAnalysis",
+   "url": "https://stockanalysis.com/private/safe-superintelligence/valuation/",
+   "status": "Private"
+  },
+  {
+   "name": "Perplexity",
+   "what": "AI answer engine",
+   "valuation_usd": 30000000000.0,
+   "valuation_text": "$30 billion post-money (Series F, per share filings; not announced by the company)",
+   "date": "2026-11-02",
+   "source": "Yahoo Finance / Forge",
+   "url": "https://finance.yahoo.com/quote/PEAI.PVT/",
+   "status": "Private · reported"
+  },
+  {
+   "name": "Scale AI",
+   "what": "AI training data",
+   "valuation_usd": 29000000000.0,
+   "valuation_text": "Over $29 billion (Meta 49% stake)",
+   "date": "2025-06-12",
+   "source": "Scale AI",
+   "url": "https://scale.com/about",
+   "status": "Private"
+  },
+  {
+   "name": "Cohere",
+   "what": "Enterprise and sovereign AI",
+   "valuation_usd": 25000000000.0,
+   "valuation_text": "C$35.7 billion (about US$25 billion per MarketWatch) if the Series E completes",
+   "date": "2026-10-29",
+   "source": "PR Newswire",
+   "url": "https://www.prnewswire.com/news-releases/cohere-announces-series-e-fundraise-targeting-cad-7-billion-to-meet-surging-global-demand-for-secure-sovereign-ai-302923951.html",
+   "status": "Private · initial close"
+  },
+  {
+   "name": "Mistral AI",
+   "what": "Mistral models",
+   "valuation_usd": 24390000000.0,
+   "valuation_text": "More than €21 billion post-money (about $24.39 billion per TechCrunch)",
+   "date": "2026-09-08",
+   "source": "TechCrunch",
+   "url": "https://techcrunch.com/2026/09/08/mistral-raises-e3b-as-sovereign-ai-becomes-big-business/",
+   "status": "Private"
+  }
+ ],
+ "unicorn_notes": [
+  "xAI (Grok) and Anysphere (Cursor) are no longer private unicorns: both are part of SpaceX, which trades as SPCX (Cursor acquisition completed Aug 14, 2026).",
+  "Cerebras listed on Nasdaq in May 2026 (CBRS) and is in the public list."
+ ]
+}
