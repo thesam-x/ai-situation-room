@@ -4,6 +4,9 @@ A one-page dashboard that tracks the frontier AI labs (OpenAI, Anthropic, Google
 
 **Live:** https://ai-situation-room.vercel.app
 
+## Why
+AI moves so fast that I wanted one place to see the labs, models, benchmarks and money at a glance.
+
 ![Dashboard](screenshots/live-v1.3-dash-light-1280x800.png)
 
 ## Views
@@ -23,3 +26,6 @@ python3 -m http.server
 ```
 
 Styles are Tailwind CSS v4, compiled to `style.css`. The data lives in `data/`.
+
+## Contributing
+Feel free to use it, fork or clone it, and open an issue or pull request with ideas. Collaboration is welcome.
