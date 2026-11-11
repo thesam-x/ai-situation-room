@@ -9,8 +9,8 @@ V.models = l => l.models.map(m => {
    <div>Release: ${U.isUnknown(r.value) ? '<i>unknown</i>' : esc(U.val(r.value))} · ${U.src(r.source_url, r.source_name)}</div>${m.notes ? `<div class="d">${esc(m.notes)}</div>` : ''}
    ${extra ? `<details><summary>details</summary>${extra}</details>` : ''}</div>`;
 }).join('');
-V.bench = l => (l.benchmarks.length ? `<div class="gapnote" style="margin-top:0">Benchmarks are mostly company-reported; harnesses and settings differ, so scores are not directly comparable across labs.</div>` : '') +
-  (l.benchmarks.map(b => `<div class="fact ${U.isUnknown(b.score)?'unk':''}"><b>${esc(b.benchmark)}</b> · ${esc(b.model)}: <b style="color:var(--heading)">${esc(b.score)}</b><div>${U.src(b.source_url, b.source_name, b.date)}</div>${b.note ? `<div class="d">${esc(b.note)}</div>` : ''}</div>`).join('') || '<div class="fact unk">No benchmarks in dataset.</div>');
+V.bench = l => (window.BM ? BM.parityList(l.id) : '') +
+  (window.BM ? BM.vendorDetails(l.benchmarks, b => `<div class="fact ${U.isUnknown(b.score)?'unk':''}"><b>${esc(b.benchmark)}</b> · ${esc(b.model)}: <b style="color:var(--heading)">${esc(b.score)}</b><div>${U.src(b.source_url, b.source_name, b.date)}</div>${b.note ? `<div class="d">${esc(b.note)}</div>` : ''}</div>`) : '');
 V.econ = l => ECON.filter(([k]) => l.economics[k]).map(([k,n]) => U.fact(l.economics[k], n)).join('');
 V.features = l => l.features.map(f => U.fact(f)).join('') || '<div class="fact unk">None listed.</div>';
 V.products = l => l.products_and_devices.map(p => `<div class="fact ${U.isUnknown(p.status)?'unk':''}"><b>${esc(p.name)}</b> <span class="d">${esc(U.pretty(p.type||''))}</span><span class="st ${esc(p.status)}">${esc(U.pretty(p.status||''))}</span>${p.note ? `<div class="d">${esc(p.note)}</div>` : ''}<div>${U.src(p.source_url, p.source_url ? new URL(p.source_url).hostname.replace('www.','') : '', p.date)}</div></div>`).join('');
@@ -32,18 +32,21 @@ V.renderCompare = () => {
   const latestRel = l => { const ms = l.models.filter(m => m.release_date && m.release_date.date && m.release_date.date >= '2026-05-10').sort((a,b) => b.release_date.date.localeCompare(a.release_date.date)); return ms.length ? `${esc(ms[0].name)}<div>${U.src(ms[0].release_date.source_url, ms[0].release_date.source_name, ms[0].release_date.date)}</div>` : '<i class="d">none in window</i>'; };
   const fl = l => { const m = U.flagship(l), r = m.release_date || {}; return `<b style="color:var(--heading)">${esc(m.name)}</b> <span class="st ${esc(m.status)}">${esc(U.pretty(m.status))}</span><div>${U.src(r.source_url, r.source_name, r.date)}</div>`; };
   const price = l => { const m = l.models.find(x => x.pricing_per_million_tokens_usd); return m ? `<span class="d">${esc(m.name)}</span><br>${cell(m.pricing_per_million_tokens_usd)}` : '<i class="d">—</i>'; };
-  const bench = l => l.benchmarks.slice(0,3).map(b => `<div>${esc(b.benchmark)}: <b style="color:var(--heading)">${esc(b.score)}</b> <span class="d">${esc(b.model)} · ${U.fmtD(b.date)}</span> <a href="${esc(b.source_url||'#')}" target="_blank" rel="noopener">↗</a></div>`).join('') || '<i class="d">—</i>';
+  const vend = l => window.BM ? BM.vendorDetails(l.benchmarks, b => `<div>${esc(b.benchmark)}: <b style="color:var(--heading)">${esc(b.score)}</b> <span class="d">${esc(b.model)} · ${U.fmtD(b.date)}</span> <a href="${esc(b.source_url||'#')}" target="_blank" rel="noopener">↗</a></div>`) : '';
+  const pRows = () => window.BM ? BM.PCOLS.map((col, i) => `<tr class="prow${i === 0 ? ' pfirst' : ''}"><td>${esc(col.label)}<div class="d">${i === 0 ? 'Independent · best model per lab' : (col.kind === 'leaderboard' ? 'Public leaderboard' : 'Epoch-run')}</div></td>${L.map(l => { const b = BM.labBest(l.id)[i];
+      return `<td class="pc${b.cell ? '' : ' nr'}" title="${esc(b.cell ? BM.tip(b.cell, b.col, b.row) : 'Not reported for this lab')}"><b class="pbs">${BM.fmt(b.cell, b.col)}</b>${b.row ? `<div class="d">${esc(b.row.model)}</div>` : ''}</td>`; }).join('')}</tr>`).join('') : '';
   const hw = l => { const p = l.products_and_devices.filter(x => /device|hardware|speaker|glasses|wearable/i.test(x.type + ' ' + x.name)); return p.length ? p.map(x => `${esc(x.name)} <span class="st ${esc(x.status)}">${esc(U.pretty(x.status))}</span>`).join('<br>') : '<i class="d">none listed</i>'; };
   const gap = l => U.btsBy(l.id).map(b => `<div><span class="gapmini"><i style="width:${b.gap_score*10}%"></i></span><b>${b.gap_score}/10</b></div>`).join('') || '—';
   const fc = l => { const f = U.fc(l.id)[0]; return f ? `<span class="fcnote">ESTIMATE</span> ${esc(f.title)} <span class="d">(${esc(f.confidence)})</span>` : '—'; };
-  document.getElementById('v-compare').innerHTML = `<h2>Lab comparison</h2><div class="sub">Side by side, from the same dataset. Each cell shows its date and source. Benchmarks are mostly company-reported and not directly comparable.</div>
+  document.getElementById('v-compare').innerHTML = `<h2>Lab comparison</h2><div class="sub">Side by side, from the same dataset. Each cell shows its date and source. Benchmark rows use only the independent parity matrix (same rows for every lab, best model per lab, n/r = not reported); vendor-reported scores are collapsed and not comparable.</div>
   <div class="tblwrap"><table class="cmp"><thead><tr><th></th>${L.map(l => `<th style="border-top:3px solid ${window.HQ[l.id].color}">${esc(l.name)}</th>`).join('')}</tr></thead><tbody>
   ${row('Parent / HQ', l => `${esc(l.parent)}<div class="d">${esc(window.HQ[l.id].city)}</div>`)}
   ${row('Flagship model', fl)}
   ${row('Latest release (May 10 – Nov 10)', latestRel)}
   ${row('Models tracked', l => l.models.length)}
   ${row('API price', price)}
-  ${row('Headline benchmarks', bench)}
+  ${pRows()}
+  ${row('Vendor-reported benchmarks', vend)}
   ${row('Revenue (latest listed)', l => cell(l.economics.revenue))}
   ${row('Latest funding', l => cell(l.economics.latest_funding))}
   ${row('Valuation', l => cell(l.economics.valuation))}

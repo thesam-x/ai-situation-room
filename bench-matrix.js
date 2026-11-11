@@ -56,5 +56,41 @@ function render(){
   root.querySelector('#bm-lab').onchange = e => { st.lab = e.target.value; draw(root); };
   draw(root);
 }
-window.BM = {render, state: st};
+// ---------- Shared parity helpers (Dashboard cards, Compare, Model progression) ----------
+// Fixed rows, fixed order: every independent column of the matrix (vendor self-reported columns excluded).
+const PCOLS = BM.columns.filter(c => c.kind !== 'self');
+const SHORTC = {gpqa:'GPQA', aime:'AIME', fm13:'FM T1–3', fm4:'FM T4', sqa:'SimpleQA', arc2:'ARC-AGI-2', wda:'WebDev', eci:'ECI'};
+const fmtP = (c, col) => c ? fmt(c, col) : 'n/r';
+const unitNote = col => col.unit === 'Elo' ? 'Elo' : col.unit === 'index' ? 'index' : '%';
+const rowOf = (lab, model) => BM.rows.find(r => r.lab === lab && r.model === model);
+// best model per lab per column (highest value; all parity columns are higher-is-better)
+function labBest(lab){
+  return PCOLS.map(col => { let best = null;
+    BM.rows.filter(r => r.lab === lab).forEach(r => { const c = r.cells[col.key]; if(c && (!best || c.v > best.cell.v)) best = {row: r, cell: c}; });
+    return {col, row: best && best.row, cell: best && best.cell}; });
+}
+const ptip = (b) => b.cell ? tip(b.cell, b.col, b.row) : `${b.col.label}: not reported for any of this lab's models in the source (${b.col.setting})`;
+function parityList(lab){
+  return `<div class="plist" role="table" aria-label="Independent benchmarks, best model per row">${labBest(lab).map(b => `<div class="pb${b.cell ? '' : ' nr'}" role="row" title="${esc(ptip(b))}">
+     <span class="pbn" role="cell">${esc(b.col.label)}</span><span class="pbm" role="cell">${b.row ? esc(b.row.model) : ''}</span><b class="pbs" role="cell">${fmtP(b.cell, b.col)}</b></div>`).join('')}</div>
+   <div class="cr">Independent only: same harness or leaderboard for every lab (Epoch AI). Best model per row; n/r = not reported. Hover for setting, effort, date and source.</div>`;
+}
+// compact 8-cell grid for one matrix row (used per model in Model progression)
+function modelGrid(r){
+  return `<div class="pgrid" role="table" aria-label="${esc(r.model)} independent benchmarks"><div class="pgm">${esc(r.model)}</div>${PCOLS.map(col => { const c = r.cells[col.key];
+    return `<div class="pgc${c ? '' : ' nr'}" title="${esc(c ? tip(c, col, r) : `${col.label}: not reported`)}"><span>${SHORTC[col.key] || esc(col.label)}</span><b>${fmtP(c, col)}</b></div>`; }).join('')}</div>`;
+}
+// vendor list, collapsed
+function vendorDetails(list, renderItem, open){
+  return `<details class="vend"${open ? ' open' : ''}><summary>Vendor-reported (not comparable) · ${list.length}</summary><div class="vbody">${list.length ? list.map(renderItem).join('') : '<div class="it d">None in dataset.</div>'}
+    <div class="cr">Reported by the labs or third parties with their own harnesses and settings; not comparable across labs or with the rows above.</div></div></details>`;
+}
+// match a matrix row to a dataset model (longest name-part prefix within the lab)
+const base = s => String(s).replace(/\s*\(.*$/, '').trim();
+function datasetModel(lab, name){
+  const D = window.AID; let best = null, bl = 0; const bb = base(name);
+  (D.labs[lab] ? D.labs[lab].models : []).forEach(m => String(m.name).split(/\s+\/\s+|,\s+/).map(base).filter(Boolean).forEach(p => { if(bb.startsWith(p) && p.length > bl){ best = m; bl = p.length; } }));
+  return best;
+}
+window.BM = {render, state: st, PCOLS, SHORTC, labBest, parityList, modelGrid, vendorDetails, datasetModel, fmt: fmtP, tip, rowOf, data: BM};
 })();

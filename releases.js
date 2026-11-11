@@ -2,6 +2,22 @@
 // Add a new object at the top for a feature or editorial change.
 window.AISR_RELEASES = [
   {
+    version: "1.6",
+    date: "2026-11-10",
+    dateLabel: "Nov 10, 2026",
+    title: "Sign in with X, live prices, 7D–1Y changes, comparable benchmarks",
+    changes: [
+      "Markets table now shows price changes over 7 days, 1 month, 3 months, 6 months and 1 year, colored green or red like the existing columns.",
+      "Each change compares the latest price with the daily close nearest to the lookback date; if a stock's history is too short, the cell shows a dash.",
+      "Click any column header (Company, Day, Market cap or a period) to sort, and click again to reverse. On phones, a Period selector shows one change column at a time so the table stays narrow.",
+      "Live prices: during US market hours (9:30 AM to 4 PM ET, weekdays) the Markets tab refreshes price and day change about once a minute from free, delayed Yahoo Finance quotes, and shows when it last updated. Outside those hours it shows the last close. If live quotes are unavailable, the daily snapshot is shown.",
+      "Benchmarks are now apples to apples everywhere: every Dashboard lab card, the Compare table and Model progression show the same fixed set of independent benchmarks in the same order (GPQA Diamond, OTIS Mock AIME, FrontierMath Tiers 1–3 and Tier 4, SimpleQA Verified, ARC-AGI-2, WebDev Arena, Epoch ECI), naming each lab's best model and showing n/r when there is no score.",
+      "Vendor-reported benchmark results moved into a collapsed 'Vendor-reported (not comparable)' section.",
+      "Sign in with X: the Markets tab is now available to signed-in X users. Sign-in only reads your public profile (users.read, tweet.read) and never posts. Your handle and a sign-out link appear in the header.",
+      "The project is now licensed under AGPL-3.0."
+    ]
+  },
+  {
     version: "1.5",
     date: "2026-11-10",
     dateLabel: "Nov 10, 2026",

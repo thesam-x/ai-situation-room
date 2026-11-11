@@ -26,8 +26,9 @@ function card(l){
   const h = HQ[l.id], open = state.open.has(l.id), g = U.maxGap(l.id), fc = U.fc(l.id)[0];
   const models = open ? l.models : l.models.filter(relDate).sort((a,b) => byDateDesc(relDate(a), relDate(b))).slice(0, 2);
   const mHtml = open ? V.models(l) : models.map(m => { const r = m.release_date; return `<div class="it"><b class="k">${esc(m.name)}</b><span class="st ${esc(m.status)}">${esc(U.pretty(m.status))}</span> <span class="d">${esc(U.pretty(m.role))}</span>${meta(r.date, r.source_url, r.source_name, r.qualifier)}</div>`; }).join('');
-  const bl = open ? l.benchmarks : l.benchmarks.slice(0, 3);
-  const bHtml = bl.map(b => `<div class="it"><div class="bench"><span>${esc(b.benchmark)} <span class="d">· ${esc(b.model)}</span></span><span class="s">${U.isUnknown(b.score) ? '<span class="unkb">UNKNOWN</span>' : esc(b.score)}</span></div>${open && b.note ? `<div class="d">${esc(b.note)}</div>` : ''}${meta(b.date, b.source_url, b.source_name)}</div>`).join('') || '<div class="it d">No benchmarks in dataset.</div>';
+  const bl = l.benchmarks;
+  const vItem = b => `<div class="it"><div class="bench"><span>${esc(b.benchmark)} <span class="d">· ${esc(b.model)}</span></span><span class="s">${U.isUnknown(b.score) ? '<span class="unkb">UNKNOWN</span>' : esc(b.score)}</span></div>${open && b.note ? `<div class="d">${esc(b.note)}</div>` : ''}${meta(b.date, b.source_url, b.source_name)}</div>`;
+  const bHtml = (window.BM ? BM.parityList(l.id) : '') + (window.BM ? BM.vendorDetails(bl, vItem) : bl.map(vItem).join(''));
   const e = l.economics;
   const eHtml = open ? V.econ(l) : [['Revenue', latestOf(e.revenue)], ['Funding', latestOf(e.latest_funding)], ['Valuation', latestOf(e.valuation)], ['IPO', latestOf(e.ipo_status)]].map(([k,f]) => econLine(k, f)).join('');
   const prods = open ? l.products_and_devices : l.products_and_devices.slice(0, 3);
@@ -44,7 +45,7 @@ function card(l){
    <div class="hd"><div><h3>${esc(l.name)}</h3><div class="hq">${esc(h.city)} · ${esc(l.parent)}</div></div>${g ? `<button class="gapchip" data-bts="${l.id}" title="Beneath the Surface: highest gap score (analytic judgment)">◐ Gap ${g}/10</button>` : ''}</div>
    ${strip}
    ${sec('models', 'Latest models', mHtml, open ? `${l.models.length} tracked` : `${Math.min(2, models.length)} of ${l.models.length}`)}
-   ${sec('bench', 'Key benchmarks', bHtml + '<div class="cr">Company-reported unless noted; not directly comparable.</div>', open ? '' : `${bl.length} of ${l.benchmarks.length}`)}
+   ${sec('bench', 'Key benchmarks · independent', bHtml, window.BM ? `${BM.PCOLS.length} fixed rows` : '')}
    ${sec('econ', 'Economics', eHtml)}
    ${sec('prod', 'Products & features', pHtml, open ? '' : `${prods.length + feats.length} of ${l.products_and_devices.length + l.features.length}`)}
    ${sec('news', 'Latest news', nHtml, open ? '' : `${news.length} of ${l.recent_news.length}`)}
