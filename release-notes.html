@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-theme-key="aisr-theme">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>
+(function(){try{var k=document.documentElement.getAttribute('data-theme-key')||'theme';var q=new URLSearchParams(location.search).get('theme');var t=(q==='light'||q==='dark')?q:localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;document.documentElement.style.backgroundColor=t==='light'?'#e8eef5':'#04080f';}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
+</script>
+<title>Release Notes — AI Situation Room</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Ccircle cx=%228%22 cy=%228%22 r=%227%22 fill=%22%2310a37f%22/%3E%3C/svg%3E">
+<style>
+  .rn-page{max-width:760px;margin:0 auto;padding:24px 20px 64px;position:relative;z-index:1}
+  .rn-page header{position:static;padding:0 0 18px;background:none;border:0;display:flex;align-items:center;gap:14px;flex-wrap:nowrap}
+  .rn-page h1{margin:18px 0 6px;font-size:28px;color:var(--heading);letter-spacing:.04em}
+  .rn-lead{color:var(--mut);margin:0 0 22px}
+  .rel{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px;background:var(--rel-bg)}
+  .rel .ver{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}
+  .rel .ver b{color:var(--acc);letter-spacing:.08em;font-size:13px}
+  .rel .ver time{color:var(--mut);font-size:12px}
+  .rel h2{margin:6px 0 8px;font-size:18px;color:var(--heading)}
+  .rel ul{margin:0;padding:0 0 0 18px}
+  .rel li{margin:0 0 6px}
+  .rn-foot{margin-top:28px;color:var(--mut);font-size:12px}
+</style>
+</head>
+<body>
+<div class="rn-page">
+  <header>
+    <div class="brand"><b>AI SITUATION ROOM</b><span>Frontier labs · models · money · compute</span></div>
+    <div class="spacer"></div>
+    <button type="button" class="tbtn theme-btn" id="themeBtn" aria-label="Switch color theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="2.6" fill="currentColor"/><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.6v1.5M8 12.9v1.5M1.6 8h1.5M12.9 8h1.5M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></g></svg>
+      <svg class="icon-moon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12.8 9.6A5.4 5.4 0 0 1 6.4 3.2 5.5 5.5 0 1 0 12.8 9.6z"/></svg>
+    </button>
+    <a class="rn-link" href="index.html">← Back to the dashboard</a>
+  </header>
+  <h1>Release notes</h1>
+  <p class="rn-lead">Newest first.</p>
+  <div id="list"></div>
+  <p class="rn-foot">AI Situation Room · <a href="index.html">Open the dashboard</a></p>
+</div>
+<script src="theme.js"></script>
+<script src="releases.js"></script>
+<script>
+(function(){
+  const mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const fmt = d => {
+    const p = (d||'').split('-');
+    return p.length===3 ? `${mon[+p[1]-1]} ${+p[2]}, ${p[0]}` : d;
+  };
+  const rows = (window.AISR_RELEASES||[]).slice().sort((a,b) => {
+    const c = String(b.date||'').localeCompare(String(a.date||''));
+    return c !== 0 ? c : String(b.version||'').localeCompare(String(a.version||''), undefined, {numeric:true});
+  });
+  document.getElementById('list').innerHTML = rows.map(r => `<article class="rel">
+    <div class="ver"><b>v${esc(r.version)}</b><time datetime="${esc(r.date)}">${esc(r.dateLabel || fmt(r.date))} ET</time></div>
+    <h2>${esc(r.title||'')}</h2>
+    <ul>${(r.changes||[]).map(c => `<li>${esc(c)}</li>`).join('')}</ul>
+  </article>`).join('') || '<p class="rn-lead">No releases listed yet.</p>';
+})();
+</script>
+</body>
+</html>

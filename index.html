@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme-key="aisr-theme">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>
+(function(){try{var k=document.documentElement.getAttribute('data-theme-key')||'theme';var q=new URLSearchParams(location.search).get('theme');var t=(q==='light'||q==='dark')?q:localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;document.documentElement.style.backgroundColor=t==='light'?'#e8eef5':'#04080f';}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
+</script>
+<title>AI Situation Room — Frontier lab dashboard (data as of Nov 10, 2026)</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Ccircle cx=%228%22 cy=%228%22 r=%227%22 fill=%22%2310a37f%22/%3E%3C/svg%3E">
+</head>
+<body>
+<header id="top">
+  <div class="row1">
+    <div class="brand"><b><span class="live"></span>AI SITUATION ROOM</b><span>Frontier labs · models · money · compute</span></div>
+    <div class="stamp">Data as of Nov 10, 2026</div>
+    <a class="rn-link" href="release-notes.html">Release notes</a>
+    <div class="spacer"></div>
+  <button type="button" class="tbtn theme-btn" id="themeBtn" aria-label="Switch color theme" title="Switch theme">
+    <svg class="icon-sun" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="2.6" fill="currentColor"/><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.6v1.5M8 12.9v1.5M1.6 8h1.5M12.9 8h1.5M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></g></svg>
+    <svg class="icon-moon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12.8 9.6A5.4 5.4 0 0 1 6.4 3.2 5.5 5.5 0 1 0 12.8 9.6z"/></svg>
+  </button>
+    <button class="tbtn" id="methBtn">ⓘ <span class="hidem">Methodology &amp; sources</span><span class="showm">Method</span></button>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-v="dash" class="on">Dashboard</button>
+    <button data-v="compare">Compare</button>
+    <button data-v="prog">Model progression</button>
+    <button data-v="timeline">Timeline</button>
+    <button data-v="bts" class="btstab">◐ Beneath the Surface</button>
+    <button data-v="compute">Compute &amp; chips</button>
+    <button data-v="delivery">Agent-Driven Delivery</button>
+  </nav>
+</header>
+
+<main>
+  <section class="view open" id="v-dash">
+    <div class="toolbar">
+      <div class="tgroup"><span class="tl">Show</span><div class="chips" id="catChips"></div></div>
+      <div class="tgroup"><span class="tl">Labs</span><div class="chips" id="labChips"></div></div>
+      <div class="tgroup"><label class="tl" for="sortSel">Sort</label>
+        <select id="sortSel">
+          <option value="default">Default order</option>
+          <option value="release">Latest model release</option>
+          <option value="activity">Most items (May–Nov)</option>
+          <option value="gap">Highest narrative gap</option>
+          <option value="name">Name A–Z</option>
+        </select>
+        <button class="tbtn sm" id="expAll">Expand all</button>
+      </div>
+    </div>
+    <div class="caveat">⚠ Benchmark scores are mostly company-reported and not directly comparable across labs. <span class="rep">REPORTED</span> = media report, not company-confirmed · <span class="unkb">UNKNOWN</span> = not found in sources reviewed.</div>
+    <details class="heatwrap" id="heatBox" open><summary id="heatSum">Activity per lab per month — count of dated, sourced items</summary><div id="heat"></div></details>
+    <div class="dashbody">
+      <div class="grid" id="grid"></div>
+      <aside id="xpanel"><h3>𝕏 POSTS</h3><div class="xsub" id="xsub"></div><div id="xitems"></div></aside>
+    </div>
+  </section>
+  <section class="view" id="v-compare"></section>
+  <section class="view" id="v-prog"></section>
+  <section class="view" id="v-timeline"></section>
+  <section class="view" id="v-bts"></section>
+  <section class="view" id="v-compute"></section>
+  <section class="view" id="v-delivery"></section>
+</main>
+
+<div id="modal"><div class="box" id="methBox"></div></div>
+
+<script src="data/ai-data.js"></script>
+<script src="data/x-posts.js"></script>
+<script src="hq.js"></script>
+<script src="util.js"></script>
+<script src="views.js"></script>
+<script src="progression.js"></script>
+<script src="data/delivery-brief.js"></script>
+<script src="delivery.js"></script>
+<script src="theme.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
